@@ -74,8 +74,11 @@ phantomJsTest {
 }
 
 test {
-    dependsOn drivers.collect { tasks["${it}Test"] }
-    enabled = false
+    dependsOn unzipChromeDriver
+
+    systemProperty "geb.env", "chrome"
+    def chromedriverFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "chromedriver.exe" : "chromedriver"
+    systemProperty "webdriver.chrome.driver", new File(unzipChromeDriver.outputs.files.singleFile, chromedriverFilename).absolutePath
 }
 
 apply from: "gradle/ci.gradle"
